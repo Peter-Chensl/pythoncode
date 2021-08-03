@@ -61,6 +61,7 @@ if __name__ == '__main__':
     pw.join()
     pr.terminate()
 '''
+'''''
 from multiprocessing import Pipe,Process
 import os,time
 def prcoessFunc(conn,name):
@@ -76,3 +77,56 @@ if __name__ == '__main__':
     print(os.getpid())
     print( "接受数据:")
     print(conr.recv())
+'''
+'''''
+import threading,time
+
+def loop():
+    print('thread %s is running...' % threading.current_thread().name)
+    n = 0
+    while n < 5:
+        n = n+1
+        print('thread %s >>> %s' % (threading.current_thread().name, n))
+        time.sleep(1)
+    print('thread %s ended' % threading.current_thread().name)
+
+print('thread %s is running..' % threading.current_thread().name)
+t = threading.Thread(target=loop,name='LoopThread')
+t.start()
+t.join()
+print('thread %s ended.'% threading.current_thread().name)
+'''
+'''''
+import time,threading
+
+def change_it(n):
+    # 先存后取，结果应该为0:
+    global balance
+    balance = balance + n
+    balance = balance - 1
+balance = 0
+look = threading.Lock()
+def run_thread(n):
+    for i in range(100000):
+        look.acquire()
+        try:
+            change_it(n)
+        finally:
+            look.release()
+
+t1 = threading.Thread(target=run_thread,args=(5,))
+t2 = threading.Thread(target=run_thread,args=(8,))
+t1.start()
+t2.start()
+t1.join()
+t2.join()
+print(balance)
+'''
+import re
+re_email = re.compile(r'^[\w]+\.?[\w]+@[\w]+\.com$')
+def is_valid_email(addr):
+    if __name__ == '__main__':
+        if re_email.match(addr):
+            return True
+
+assert is_valid_email('some@djhf.com')
